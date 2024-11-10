@@ -35,6 +35,15 @@ app.get('/api/sensor-data', async (req, res) => {
   }
 });
 
+app.get('/api/sensor-data/latest', async (req, res) => {
+  try {
+  const result = await pool.query('SELECT * FROM sensor_data ORDER BY created_at DESC LIMIT 1');
+  res.json(result.rows[0]);
+  } catch (error) {
+  res.status(500).json({ error: error.message });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
